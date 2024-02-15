@@ -58,13 +58,13 @@ def process_mbox(infile, prefix):
         if gmail_labels:
             gmail_labels = decode_rfc2822(gmail_labels)
 
-        if "inbox" in gmail_labels:
+        if "posta in arrivo" in gmail_labels:
             target = "inbox"
-        elif "sent" in gmail_labels:
+        elif "posta inviata" in gmail_labels:
             target = "sent"
         else:
             for label in gmail_labels.split(','):
-                if label not in ["important", "unread", "starred", "newsletters"]:
+                if label not in ["importanti", "da leggere", "speciali", "newsletters"]:
                     target = f"{prefix}{label.title().replace(os.pathsep, '.')}.mbox"
                     if target not in boxes:
                         boxes[target] = mailbox.mbox(target, None, True)
