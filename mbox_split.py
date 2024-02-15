@@ -69,6 +69,7 @@ def main(argv):
             target = "sent"
         else:
             for label in gmail_labels.split(','):
+                label = label.replace("/", "-") # Nested labels have a forward slash.
                 if label != "important" and label != "unread" and label != "starred" and label != "newsletters":
                     target = prefix + label.title().replace(os.pathsep, '.') + ".mbox"
                     if target not in boxes:
