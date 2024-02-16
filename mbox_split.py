@@ -49,11 +49,11 @@ def process_mbox(infile, prefix):
     boxes = {
         "inbox": mailbox.mbox(f"{prefix}Inbox.mbox", None, True),
         "sent": mailbox.mbox(f"{prefix}Sent.mbox", None, True),
-        "archive": mailbox.mbox(f"{prefix}Archive.mbox", None, True),
+        "archiviata": mailbox.mbox(f"{prefix}Archiviata.mbox", None, True),
     }
 
     for message in mailbox.mbox(infile):
-        target = "archive"
+        target = "archiviata"
         gmail_labels = message.get("X-Gmail-Labels", "").lower()
         if gmail_labels:
             gmail_labels = decode_rfc2822(gmail_labels)
@@ -64,11 +64,10 @@ def process_mbox(infile, prefix):
             target = "sent"
         else:
             for label in gmail_labels.split(','):
-                if label not in ["importanti", "da leggere", "speciali", "newsletters"]:
-                    target = f"{prefix}{label.title().replace(os.pathsep, '.')}.mbox"
-                    if target not in boxes:
-                        boxes[target] = mailbox.mbox(target, None, True)
-                    break
+                target = f"{prefix}{label.title().replace(os.pathsep, '.')}.mbox"
+                if target not in boxes:
+                    boxes[target] = mailbox.mbox(target, None, True)
+                break
         try:
             boxes[target].add(message)
         except HeaderParseError as e:
